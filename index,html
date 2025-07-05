@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Numerology Chart Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    .login, .chart-section {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input[type="text"], input[type="password"], input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .hidden {
+      display: none;
+    }
+    #chart {
+      padding: 20px;
+      border-radius: 10px;
+      background: #fff;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login" id="login-box">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <div class="chart-section hidden" id="chart-section">
+    <h2>Numerology Chart</h2>
+    <input type="text" id="fullName" placeholder="Full Name">
+    <input type="date" id="dob">
+    <input type="text" id="lifePath" placeholder="Life Path Number">
+    <input type="text" id="destiny" placeholder="Destiny Number">
+    <input type="text" id="soulUrge" placeholder="Soul Urge Number">
+    <input type="text" id="personality" placeholder="Personality Number">
+    <input type="text" id="luckyNumbers" placeholder="Lucky Numbers">
+    <input type="text" id="notes" placeholder="Additional Notes">
+
+    <button onclick="generateChart()">Generate Chart</button>
+    <button onclick="downloadPDF()">Download PDF</button>
+
+    <div id="chart"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    const USERNAME = 'numerologist';
+    const PASSWORD = '12345';
+
+    function login() {
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value.trim();
+      if (u === USERNAME && p === PASSWORD) {
+        document.getElementById('login-box').classList.add('hidden');
+        document.getElementById('chart-section').classList.remove('hidden');
+      } else {
+        alert('Invalid login. Please try again.');
+      }
+    }
+
+    function generateChart() {
+      const name = document.getElementById('fullName').value.trim();
+      const dob = document.getElementById('dob').value;
+      const lifePath = document.getElementById('lifePath').value.trim();
+      const destiny = document.getElementById('destiny').value.trim();
+      const soulUrge = document.getElementById('soulUrge').value.trim();
+      const personality = document.getElementById('personality').value.trim();
+      const luckyNumbers = document.getElementById('luckyNumbers').value.trim();
+      const notes = document.getElementById('notes').value.trim();
+
+      const chartHTML = `
+        <h3>${name || 'No Name Provided'}</h3>
+        <p><strong>Date of Birth:</strong> ${dob || 'N/A'}</p>
+        <p><strong>Life Path Number:</strong> ${lifePath || 'N/A'}</p>
+        <p><strong>Destiny Number:</strong> ${destiny || 'N/A'}</p>
+        <p><strong>Soul Urge Number:</strong> ${soulUrge || 'N/A'}</p>
+        <p><strong>Personality Number:</strong> ${personality || 'N/A'}</p>
+        <p><strong>Lucky Numbers:</strong> ${luckyNumbers || 'N/A'}</p>
+        <p><strong>Notes:</strong> ${notes || 'N/A'}</p>
+      `;
+
+      document.getElementById('chart').innerHTML = chartHTML;
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById('chart');
+      if (!element.innerHTML.trim()) {
+        alert('Please generate the chart first.');
+        return;
+      }
+      html2pdf().from(element).save('numerology_chart.pdf');
+    }
+  </script>
+
+</body>
+</html>
